@@ -2,7 +2,7 @@ import Favorite from '../models/Favorite.js';
 import { failure } from '../utils/response.js';
 import mongoose from 'mongoose';
 
-// Add favorite
+
 export const addFavorite = async (req, res, next) => {
   try {
     const { recipeId } = req.body;
@@ -10,7 +10,7 @@ export const addFavorite = async (req, res, next) => {
 
     if (!recipeId) return failure(res, 'recipeId required', 400);
 
-    // Validate and convert recipeId to ObjectId
+  
     if (!mongoose.Types.ObjectId.isValid(recipeId)) {
       return res.status(400).json({ error: 'Invalid recipeId format' });
     }
@@ -26,12 +26,12 @@ export const addFavorite = async (req, res, next) => {
   }
 };
 
-// Remove favorite
+
 export const removeFavorite = async (req, res, next) => {
   try {
     const { recipeId } = req.params;
 
-    // Validate recipeId
+
     if (!mongoose.Types.ObjectId.isValid(recipeId)) {
       console.error('Invalid recipeId format:', recipeId);
       return failure(res, 'Invalid recipeId format', 400);
@@ -45,7 +45,7 @@ export const removeFavorite = async (req, res, next) => {
   }
 };
 
-// List favorites
+
 export const listFavorites = async (req, res, next) => {
   try {
     const list = await Favorite.find({ userId: req.user.id }).populate('recipeId');

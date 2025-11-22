@@ -11,7 +11,7 @@ export const analyzeImage = async (req, res) => {
             return res.status(400).json({ error: "No image file provided" });
         }
 
-        // Convert buffer to base64
+       
         const imageBase64 = req.file.buffer.toString('base64');
         const mimeType = req.file.mimetype;
 
@@ -36,7 +36,7 @@ export const analyzeImage = async (req, res) => {
             return res.status(400).json({ error: "Image does not appear to be food" });
         }
 
-        // Parse the comma-separated list
+    
         const ingredients = text.split(',').map(i => i.trim().toLowerCase()).filter(i => i.length > 0);
 
         res.json({ ingredients });

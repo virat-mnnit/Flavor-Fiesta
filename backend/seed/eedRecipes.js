@@ -2,23 +2,24 @@ import mongoose from "mongoose";
 import Recipe from "../models/Recipe.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import dotenv from "dotenv";
+dotenv.config();
 
-// Your fallback image
+
 const LOCAL_NO_IMAGE =
   "C:/Users/Dell/Desktop/Virat_recipe/frontend/src/assets/no-image-available.webp";
 
-// Load your recipe JSON/TS file (converted to pure JSON)
+
 import { recipes } from "../../frontend/src/components/data/recipes_updated.js";
 
-// Fix __dirname in ES modules
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Your Mongo URL
-const MONGO_URL =
-  "mongodb+srv://abhishekkumar30350_db_user:YpAaDxjI74NdYuiM@cluster0.oinjzqf.mongodb.net/";
 
-// Convert a single recipe into DB format
+const MONGO_URL =
+  process.env.MONGO_URL;
+
 function transformRecipe(recipe) {
   return {
     title: recipe.title || "",
@@ -44,7 +45,7 @@ function transformRecipe(recipe) {
 
     rating: recipe.rating || 0,
 
-    // No author since these are system recipes
+   
     authorId: null,
   };
 }
@@ -56,7 +57,6 @@ async function seedRecipes() {
 
     console.log("Connected!");
 
-    // Clear existing recipes if needed
     await Recipe.deleteMany({});
     console.log("Old recipes cleared!");
 

@@ -1,7 +1,7 @@
 import Rating from '../models/Rating.js';
 import { failure } from '../utils/response.js';
 
-// Add or update rating
+
 export const saveRating = async (req, res, next) => {
   try {
     const { recipeId, rating } = req.body;
@@ -23,7 +23,7 @@ export const saveRating = async (req, res, next) => {
   }
 };
 
-// Get average rating
+
 export const getRating = async (req, res, next) => {
   try {
     const stats = await Rating.aggregate([

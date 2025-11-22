@@ -1,7 +1,7 @@
 import Comment from '../models/Comment.js';
 import { failure } from '../utils/response.js';
 
-// Add comment
+
 export const addComment = async (req, res, next) => {
   try {
     const { recipeId, comment } = req.body;
@@ -14,7 +14,7 @@ export const addComment = async (req, res, next) => {
   }
 };
 
-// Get comments for recipe
+
 export const getComments = async (req, res, next) => {
   try {
     const cs = await Comment.find({ recipeId: req.params.recipeId }).populate('userId', 'displayName');
@@ -24,7 +24,7 @@ export const getComments = async (req, res, next) => {
   }
 };
 
-// Update comment (owner)
+
 export const updateComment = async (req, res, next) => {
   try {
     const { comment } = req.body;
@@ -40,7 +40,7 @@ export const updateComment = async (req, res, next) => {
   }
 };
 
-// Delete comment (owner)
+
 export const deleteComment = async (req, res, next) => {
   try {
     const c = await Comment.findById(req.params.id);

@@ -1,9 +1,6 @@
 import Recipe from '../models/Recipe.js';
 import { failure } from '../utils/response.js';
 
-/* ----------------------------------------------------------
-   CREATE RECIPE
----------------------------------------------------------- */
 export const createRecipe = async (req, res, next) => {
   try {
     const {
@@ -47,12 +44,7 @@ export const createRecipe = async (req, res, next) => {
   }
 };
 
-/* ----------------------------------------------------------
-   SEARCH RECIPES (INGREDIENTS, CUISINE, DIFFICULTY)
----------------------------------------------------------- */
-/* ----------------------------------------------------------
-   HELPER: POPULATE FAVORITES
----------------------------------------------------------- */
+
 const populateFavorites = async (recipes, userId) => {
   if (!userId) return recipes;
 
@@ -65,15 +57,13 @@ const populateFavorites = async (recipes, userId) => {
   });
 };
 
-/* ----------------------------------------------------------
-   SEARCH RECIPES (INGREDIENTS, CUISINE, DIFFICULTY)
----------------------------------------------------------- */
+
 export const searchRecipes = async (req, res) => {
   try {
     const { ingredients, cuisine, difficulty, dietary } = req.query;
     const query = {};
 
-    // Ingredient ANY match
+    
     if (ingredients) {
       const ingList = ingredients
         .split(',')
@@ -83,11 +73,11 @@ export const searchRecipes = async (req, res) => {
 
     const escapeRegex = (text) => text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 
-    // Optional filters
+    
     if (cuisine) query.cuisine = new RegExp(`^${escapeRegex(cuisine)}$`, 'i');
     if (difficulty) query.difficulty = new RegExp(`^${escapeRegex(difficulty)}$`, 'i');
 
-    // Dietary ANY match
+  
     if (dietary) {
       const dList = dietary.split(',').map(d => d.trim().toLowerCase());
       query.dietaryRestrictions = { $in: dList };
@@ -95,7 +85,7 @@ export const searchRecipes = async (req, res) => {
 
     let results = await Recipe.find(query).limit(200);
 
-    // Populate isFavorite
+
     if (req.user) {
       results = await populateFavorites(results, req.user.id);
     }
@@ -108,9 +98,6 @@ export const searchRecipes = async (req, res) => {
   }
 };
 
-/* ----------------------------------------------------------
-   GET ALL RECIPES (PAGINATION)
----------------------------------------------------------- */
 export const getAllRecipes = async (req, res, next) => {
   try {
     const page = Math.max(1, parseInt(req.query.page || '1'));
@@ -124,7 +111,7 @@ export const getAllRecipes = async (req, res, next) => {
       .limit(limit)
       .populate('authorId', 'displayName');
 
-    // Populate isFavorite
+   
     if (req.user) {
       recipes = await populateFavorites(recipes, req.user.id);
     }
@@ -135,9 +122,7 @@ export const getAllRecipes = async (req, res, next) => {
   }
 };
 
-/* ----------------------------------------------------------
-   GET SINGLE RECIPE
----------------------------------------------------------- */
+
 export const getRecipe = async (req, res, next) => {
   try {
     let recipe = await Recipe.findById(req.params.id)
@@ -145,7 +130,7 @@ export const getRecipe = async (req, res, next) => {
 
     if (!recipe) return failure(res, 'Not found', 404);
 
-    // Populate isFavorite
+    
     if (req.user) {
       const [updatedRecipe] = await populateFavorites([recipe], req.user.id);
       recipe = updatedRecipe;
@@ -157,15 +142,13 @@ export const getRecipe = async (req, res, next) => {
   }
 };
 
-/* ----------------------------------------------------------
-   UPDATE RECIPE
----------------------------------------------------------- */
+
 export const updateRecipe = async (req, res, next) => {
   try {
     const recipe = await Recipe.findById(req.params.id);
     if (!recipe) return failure(res, 'Not found', 404);
 
-    // Only allow owner to modify
+   
     if (recipe.authorId && recipe.authorId.toString() !== req.user.id)
       return failure(res, 'Forbidden', 403);
 
@@ -188,9 +171,7 @@ export const updateRecipe = async (req, res, next) => {
   }
 };
 
-/* ----------------------------------------------------------
-   DELETE RECIPE
----------------------------------------------------------- */
+
 export const deleteRecipe = async (req, res, next) => {
   try {
     const recipe = await Recipe.findById(req.params.id);
