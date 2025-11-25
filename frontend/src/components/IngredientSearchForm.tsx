@@ -186,7 +186,7 @@ export const IngredientSearchForm = ({ onRecipesFound }: Props) => {
                         </div>
                     </div>
 
-                    {/* Ingredient Chips */}
+                    
                     <div className="flex flex-wrap gap-2 mt-2">
                         {ingredients.map((i) => (
                             <Badge key={i} className="flex gap-1 px-2 py-1">
@@ -200,7 +200,6 @@ export const IngredientSearchForm = ({ onRecipesFound }: Props) => {
                     </div>
                 </div>
 
-                {/* DIETARY FILTERS */}
                 <div className="space-y-2">
                     <Label>Dietary Restrictions</Label>
                     <div className="flex flex-wrap gap-2">
@@ -217,7 +216,7 @@ export const IngredientSearchForm = ({ onRecipesFound }: Props) => {
                     </div>
                 </div>
 
-                {/* CUISINE + DIFFICULTY */}
+      
                 <div className="grid grid-cols-2 gap-4">
                     <div>
                         <Label>Cuisine</Label>
@@ -251,7 +250,7 @@ export const IngredientSearchForm = ({ onRecipesFound }: Props) => {
                     </div>
                 </div>
 
-                {/* BUTTON */}
+           
                 <Button
                     onClick={handleSearch}
                     disabled={loading}
